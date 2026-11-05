@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Parrainages BND 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one working column — header with live summary, tab bar, then the tab's table/cards. */
+:root{
+  --bg:#F3F5F9; --surface:#FFFFFF; --sunk:#E9EDF4; --ink:#141B2D; --muted:#5B6478; --line:#D8DEE9;
+  --accent:#2446C7; --accent-ink:#FFFFFF; --accent-soft:#E2E8FB;
+  --ok:#1C7548; --ok-soft:#DDF1E6; --warn:#9A5B00; --warn-soft:#FBEFD9; --bad:#B4232F; --bad-soft:#F9E0E2;
+  --r2:#5C79E0; --r3:#93A6EA; --r4:#C3CDF1;
+  --f-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1220; --surface:#161B2B; --sunk:#1C2234; --ink:#E6E9F2; --muted:#9AA3B8; --line:#2A3247;
+  --accent:#839BFF; --accent-ink:#0E1220; --accent-soft:#1F2A50;
+  --ok:#55C98F; --ok-soft:#163626; --warn:#E6A846; --warn-soft:#3A2B12; --bad:#F2727D; --bad-soft:#3D1A1F;
+  --r2:#6178D8; --r3:#46569A; --r4:#353F6B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1220; --surface:#161B2B; --sunk:#1C2234; --ink:#E6E9F2; --muted:#9AA3B8; --line:#2A3247;
+  --accent:#839BFF; --accent-ink:#0E1220; --accent-soft:#1F2A50;
+  --ok:#55C98F; --ok-soft:#163626; --warn:#E6A846; --warn-soft:#3A2B12; --bad:#F2727D; --bad-soft:#3D1A1F;
+  --r2:#6178D8; --r3:#46569A; --r4:#353F6B; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:28px;font-weight:700}
+h2{font-size:19px;font-weight:600}
+h3{font-size:15px;font-weight:600}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header.top{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between}
+header.top p{margin:4px 0 0;max-width:62ch;color:var(--muted)}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.summary>div{background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.summary .v{font-family:var(--f-mono);font-size:22px;font-weight:600}
+.summary .l{font-size:12px;color:var(--muted)}
+.distbar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--sunk)}
+.distbar span{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+nav.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+nav.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;font:600 14px var(--f-body);color:var(--muted);cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs button .ct{font-family:var(--f-mono);font-size:11px;background:var(--sunk);border-radius:8px;padding:1px 6px;margin-left:6px}
+section.panel{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.spacer{flex:1}
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;background:var(--sunk);position:sticky;top:0;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--sunk)}
+tbody tr.sel td{background:var(--accent-soft)}
+td.r{text-align:right}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--sunk);color:var(--ink);white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.chip.acc{background:var(--accent-soft);color:var(--accent)}
+.rk{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:6px;font:600 12px var(--f-mono);padding:0 5px}
+.rk1{background:var(--accent);color:var(--accent-ink)}
+.rk2{background:var(--r2);color:#fff}
+.rk3{background:var(--r3);color:var(--ink)}
+.rk4{background:var(--r4);color:var(--ink)}
+.rk0{background:var(--bad-soft);color:var(--bad)}
+.choices{display:flex;flex-wrap:wrap;gap:4px}
+.choices .chip b{font-family:var(--f-mono);font-weight:600;color:var(--muted)}
+button.btn,label.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13px var(--f-body);padding:7px 12px;border-radius:8px;cursor:pointer}
+button.btn:hover,label.btn:hover{border-color:var(--accent)}
+button.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button.btn.ghost{border-color:transparent;background:none;padding:4px 8px}
+button.btn.danger{color:var(--bad)}
+button.icon{border:1px solid var(--line);background:var(--surface);color:var(--ink);width:26px;height:26px;border-radius:6px;cursor:pointer;font:600 13px var(--f-mono);display:inline-grid;place-items:center}
+button.icon:disabled{opacity:.35;cursor:default}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select,input[type=text],input[type=number],input[type=search]{font:13px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 8px;max-width:100%}
+input[type=number]{width:72px;font-family:var(--f-mono)}
+input.sm{width:52px}
+label.fld{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.explain li{margin-bottom:6px}
+ol.plain{margin:0;padding-left:20px}
+.matrix td,.matrix th{text-align:center}
+.matrix td:first-child,.matrix th:first-child{text-align:left}
+button.hc{width:100%;min-width:30px;height:24px;border:0;border-radius:4px;font:600 11px var(--f-mono);cursor:pointer;color:var(--ink)}
+button.hc.h0{background:var(--sunk);color:var(--muted)}
+button.hc.h1{background:var(--r3)}
+button.hc.h2{background:var(--accent);color:var(--accent-ink)}
+button.hc.inf{outline:1px dashed var(--muted);outline-offset:-2px}
+.heat th{position:sticky;top:0}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:10px 14px;font-weight:600;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.note{font-size:13px;color:var(--muted);max-width:75ch}
+.note b{color:var(--ink)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;font-size:13px;z-index:20;max-width:90vw}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+.formula{font-family:var(--f-mono);font-size:13px;background:var(--sunk);padding:8px 10px;border-radius:6px;overflow-x:auto}
+@media (max-width:560px){h1{font-size:23px}.summary .v{font-size:19px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Business Networking Day 2026 · TSE</div>
+      <h1>Parrainages BND 2026</h1>
+      <p>Affectation élève–entreprise par acceptation différée (Gale-Shapley côté élèves) : stable et sans intérêt à mentir sur ses vœux.</p>
+    </div>
+    <div class="row" style="gap:8px">
+      <span id="stabBadge"></span>
+    </div>
+  </header>
+
+  <div id="banner"></div>
+  <div class="summary" id="summary"></div>
+  <div class="card" style="gap:8px">
+    <div class="row"><h3>Rang du vœu obtenu</h3><span class="spacer"></span><div class="legend" id="distLegend"></div></div>
+    <div class="distbar" id="distbar" role="img" aria-label="Répartition des rangs obtenus"></div>
+  </div>
+
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <main id="view"></main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+"use strict";
+/* ---------------- Référentiels ---------------- */
+const DOMAINS=[
+  {id:'D',label:'Data & IA'},
+  {id:'C',label:'Éco. de la concurrence & litiges'},
+  {id:'P',label:'Politiques publiques & institutions'},
+  {id:'F',label:'Banque, finance & assurance'},
+  {id:'S',label:'Conseil, stratégie & audit'},
+  {id:'E',label:'Énergie & environnement'},
+  {id:'I',label:'Industrie, commerce & logistique'}];
+const DLAB=Object.fromEntries(DOMAINS.map(d=>[d.id,d.label]));
+const ROLES=[{id:'board',label:'Board'},{id:'actif',label:'Membre actif'},{id:'membre',label:'Membre'}];
+const NIVEAUX=['M2','M1','L3'];
+const DEFAULT_ASSOS=['Bureau Des Étudiants','Junior Etudes','Bureau Des Sports','TSEconomist','ECHO'];
+
+// Affinité master × domaine : 2 = cœur de métier, 1 = voisin, 0 = éloigné
+const DEFAULT_MASTERS=[
+  {id:'d3s',label:'D3S – Data Science for Social Sciences',aff:{D:2,S:1,F:1,I:1}},
+  {id:'med',label:'MED – Mathematics and Economic Decision',aff:{D:2,F:2,C:1}},
+  {id:'se',label:'Statistique et Économétrie',aff:{D:2,F:1,S:1,P:1}},
+  {id:'eee',label:'EEE – Econometrics and Empirical Economics',aff:{D:2,C:1,P:1}},
+  {id:'emo',label:'EMO – Economics of Markets and Organizations',aff:{C:2,S:1,I:1,P:1}},
+  {id:'egr',label:'EGR – Economics of Global Risks',aff:{F:2,P:1,E:1}},
+  {id:'ecl',label:'Economics and Law / ECL (concurrence)',aff:{C:2,P:1,S:1}},
+  {id:'fin',label:'Finance (M2) / Économie et Finance',aff:{F:2,S:1,C:1}},
+  {id:'eco',label:'Economics (M1 international)',aff:{C:1,P:1,F:1}},
+  {id:'ppd',label:'PPD – Public Policy and Development',aff:{P:2,E:1,C:1}},
+  {id:'eep',label:'EEP – Environmental Economics and Policy',aff:{E:2,P:2,C:1}},
+  {id:'ae',label:'Applied Economics (M1 international)',aff:{P:2,E:1,S:1}},
+  {id:'ea',label:'Économie Appliquée (EA)',aff:{S:2,P:1,C:1,I:1,F:1}},
+  {id:'ete',label:'ETE / MRes (recherche)',aff:{P:2,C:1,F:1}},
+  {id:'l3',label:'L3 Économie',aff:{C:1,P:1,F:1,S:1}}];
+
+// Domaine principal / secondaire de chaque entreprise (clé = nom normalisé)
+const COMPANY_DOMAINS={
+ 'ade':['P','S'],'admiral group l olivier assurance':['F','D'],'airbus':['I','D'],'alix partners':['S','F'],
+ 'altermind economics':['C','P'],'analysis group':['C','F'],'aqsone':['D','S'],'avisia':['D','S'],
+ 'banque de france':['F','P'],'bnp paribas':['F',''],'brg berkeley research group':['C','F'],
+ 'charles river associates':['C','S'],'citizing':['P','S'],'command strategy':['S',''],'compass lexecon':['C',''],
+ 'consort group':['D','S'],'copenhagen economics':['C','P'],'cornerstone research':['C','F'],
+ 'deloitte economic advisory':['C','P'],
+ 'direction generale de la concurrence de la consommation et de la repression des fraudes':['P','C'],
+ 'direction generale des entreprises':['P','I'],'direction generale du tresor':['P','F'],'dkv belgium':['F',''],
+ 'e ca economics gmbh a brg company':['C',''],'econic partners':['C',''],'eight advisory':['S','F'],
+ 'eulidia':['D','S'],'european commission':['P','C'],'ey consulting':['S','D'],'forvis mazars':['S','F'],
+ 'frontier economics':['C','E'],'galec e leclerc':['I','D'],'generali':['F',''],'groupe la poste':['I','F'],
+ 'international energy agency iea':['E','P'],'la cour des comptes':['P',''],'leadsponsor':['D','I'],
+ 'mapp kpmg':['P','C'],'oecd':['P','E'],'oxera consulting':['C','F'],'people vox':['I','D'],
+ 'pwc societe d avocats':['S','C'],'rbb economics':['C',''],'societe generale':['F','']};
+
+// Proximité directe entreprise × master (2 = débouché naturel, 1 = voisin) + justification.
+// M1 Economics, M1 Applied Economics et L3 sont déduits plus bas.
+const COMPANY_AFF={
+ 'ade':['2:ppd|1:eep,ea,eee,se',"Évaluation de politiques publiques et d'aide au développement, surtout pour l'UE"],
+ 'admiral group l olivier assurance':['2:med,se,d3s|1:fin,egr',"Assurance auto en ligne : tarification, actuariat, modèles de risque"],
+ 'airbus':['2:d3s|1:med,se,emo,ea',"Industriel : data, prévision, optimisation, analyse de marché"],
+ 'alix partners':['2:fin,ea|1:emo,med',"Restructuring et performance d'entreprise : finance d'entreprise, diagnostic opérationnel"],
+ 'altermind economics':['2:emo,ecl|1:ppd,eee,ete,ea',"Conseil économique et stratégique : régulation, concurrence, politiques publiques"],
+ 'analysis group':['2:ecl,eee,emo|1:fin,se,ete',"Économie du contentieux : concurrence, dommages, économétrie appliquée"],
+ 'aqsone':['2:d3s,se|1:med,eee',"Conseil en data science et IA"],
+ 'avisia':['2:d3s,se|1:med,ea',"Conseil data & IA, transformation numérique"],
+ 'banque de france':['2:egr,fin,ete|1:eee,med,se',"Banque centrale : macro, stabilité financière, recherche, supervision"],
+ 'bnp paribas':['2:fin,med|1:egr,d3s,se,ea',"Banque : marchés, risques, quant, data"],
+ 'brg berkeley research group':['2:ecl,emo|1:eee,fin,ete',"Expertise économique en contentieux et concurrence"],
+ 'charles river associates':['2:ecl,emo,eee|1:ete,eep,fin',"Conseil en économie de la concurrence (fusions, abus) et énergie"],
+ 'citizing':['2:ppd,ea|1:eep,eee,se',"Évaluation socio-économique et mesure d'impact des politiques publiques"],
+ 'command strategy':['2:fin|1:ea,emo',"Cabinet de conseil indépendant orienté finance et stratégie"],
+ 'compass lexecon':['2:ecl,emo,eee|1:ete,fin',"Référence de l'économie de la concurrence (fusions, cartels, régulation)"],
+ 'consort group':['2:d3s|1:se,ea',"ESN : services informatiques et transformation numérique"],
+ 'copenhagen economics':['2:ecl,emo|1:eep,eee,ppd',"Concurrence, régulation, énergie et commerce international"],
+ 'cornerstone research':['2:ecl,fin,eee|1:emo,ete',"Contentieux économique et financier, analyses économétriques"],
+ 'deloitte economic advisory':['2:emo,ecl,ppd|1:eee,ea,eep',"Concurrence, régulation et évaluation de politiques publiques"],
+ 'direction generale de la concurrence de la consommation et de la repression des fraudes':['2:ecl,emo|1:ppd,ea',"Administration de la concurrence et de la protection du consommateur"],
+ 'direction generale des entreprises':['2:emo,ppd|1:ea,eep',"Politique industrielle, numérique et économie des entreprises"],
+ 'direction generale du tresor':['2:ete,egr,ppd|1:fin,eee,emo',"Macroéconomie, prévision, finances publiques, politique économique"],
+ 'dkv belgium':['2:med,se|1:fin,egr,d3s',"Assurance santé : actuariat, tarification, modélisation"],
+ 'e ca economics gmbh a brg company':['2:ecl,emo|1:eee',"Cabinet spécialisé en économie de la concurrence (groupe BRG)"],
+ 'econic partners':['2:ecl,emo|1:eee',"Économie de la concurrence et de la régulation"],
+ 'eight advisory':['2:fin,ea|1:emo',"Transaction services, restructuring, conseil financier"],
+ 'eulidia':['2:d3s,se|1:ea',"Conseil data, BI et analytics"],
+ 'european commission':['2:ecl,ppd,ete|1:emo,eep,egr',"DG COMP, ECFIN, etc. : concurrence, politique économique européenne"],
+ 'ey consulting':['2:ea,d3s|1:fin,emo',"Conseil en stratégie, transformation et technologie"],
+ 'forvis mazars':['2:fin,ea|1:se',"Audit, conseil financier, fiscalité"],
+ 'frontier economics':['2:ecl,emo,eep|1:eee,ppd',"Concurrence, régulation, énergie et environnement"],
+ 'galec e leclerc':['2:emo|1:d3s,ea,ecl',"Centrale d'achats : négociation fournisseurs, organisation de marché, data commerciale"],
+ 'generali':['2:med,fin|1:egr,se',"Assurance : actuariat, gestion d'actifs, risques"],
+ 'groupe la poste':['1:ea,emo,d3s,fin',"Groupe multi-métiers (logistique, banque, numérique), pas de lien dominant"],
+ 'international energy agency iea':['2:eep|1:ppd,egr,eee,ete',"Analyse énergétique, transition, modélisation et politique climat"],
+ 'la cour des comptes':['2:ppd|1:ea,ete,fin',"Contrôle et évaluation des finances et politiques publiques"],
+ 'leadsponsor':['2:d3s|1:ea,emo',"Start-up IA du sponsoring sportif : data, produit, business development"],
+ 'mapp kpmg':['2:ecl,emo,ppd|1:eee,ea',"Conseil économique (concurrence, régulation, évaluation) chez KPMG"],
+ 'oecd':['2:ete,ppd,eep|1:eee,egr,emo',"Recherche et analyse économique comparée, politiques publiques"],
+ 'oxera consulting':['2:ecl,emo,fin|1:eee',"Concurrence, régulation et finance"],
+ 'people vox':['1:d3s,ea',"Logiciel de gestion d'entrepôt pour l'e-commerce : opérations, data"],
+ 'pwc societe d avocats':['2:ecl|1:fin,ea',"Conseil juridique et fiscal : droit de la concurrence, fiscalité"],
+ 'rbb economics':['2:ecl,emo|1:eee',"Cabinet spécialisé en économie de la concurrence"],
+ 'societe generale':['2:fin,med|1:egr,se,d3s',"Banque : marchés, risques, quant, data"]};
+function buildAff(code){
+  const aff=Object.fromEntries(DEFAULT_MASTERS.map(m=>[m.id,0]));for(const part of code.split('|')){const [v,list]=part.split(':');list.split(',').forEach(m=>aff[m]=+v)}
+  const g=m=>aff[m]||0;
+  aff.eco=Math.max(g('ete'),g('emo'),g('egr'),g('fin'),g('ecl'))>=2?1:0;  // M1 Economics → EMO/EGR/ETE/Finance/ECL
+  aff.ae=Math.max(g('ppd'),g('eep'));                                        // M1 Applied Econ → PPD/EEP
+  aff.l3=1;                                                                  // L3 : généraliste
+  return aff;
+}
+function applyCompanyAff(c){const a=COMPANY_AFF[norm(c.name)];if(a&&!c.aff){c.aff=buildAff(a[0]);c.why=a[1]}}
+
+// Popularité observée dans la synthèse BND (anonymisée : 2 points par choix n° 1, 1 par autre vœu)
+const POP={'ade':1,'airbus':2,'aqsone':2,'avisia':3,'banque de france':10,'bnp paribas':4,'brg berkeley research group':4,'charles river associates':1,'citizing':1,'compass lexecon':3,'consort group':1,'copenhagen economics':4,'deloitte economic advisory':7,'direction generale de la concurrence de la consommation et de la repression des fraudes':3,'direction generale des entreprises':4,'direction generale du tresor':2,'e ca economics gmbh a brg company':1,'econic partners':4,'eulidia':2,'european commission':4,'ey consulting':1,'forvis mazars':2,'galec e leclerc':1,'generali':1,'international energy agency iea':5,'la cour des comptes':1,'leadsponsor':1,'mapp kpmg':2,'oecd':13,'rbb economics':4,'societe generale':3};
+// Liste des entreprises BND 2026 (colonnes d'associations vidées : aucun élève réel dans cette page)
+const RAW_HEADER=['Entreprise/Institution','Secteur','Bureau Des Étudiants','Junior Etudes','Bureau Des Sports','TSEconomist','ECHO'];
+const RAW=[
+['ADE','Cabinet de conseil',null,null,null,null,null],
+['Admiral Group - L’olivier Assurance','Assurance / Services financiers',null,null,null,null,null],
+['Airbus','Industrie Aéronautique et Spatiale Durable',null,null,null,null,null],
+['Alix Partners','Global consulting firm specializing in turnaround, restructuring, and performance improvement',null,null,null,null,null],
+['Altermind Economics','Conseil économique',null,null,null,null,null],
+['Analysis Group','Economic, Financial, and Strategy Consultancy Supporting Litigation',null,null,null,null,null],
+['Aqsone','Data science et intelligence artificielle',null,null,null,null,null],
+['AVISIA',"Conseil en stratégie et transformation numérique (Data science et l'IA)",null,null,null,null,null],
+['Banque de France','Secteur public financier',null,null,null,null,null],
+['BNP Paribas','Banque et Services Financiers Internationaux',null,null,null,null,null],
+['BRG - Berkeley Research Group','Global consulting firm: economic, financial and advisory expertise in disputes',null,null,null,null,null],
+['Charles River Associates','Economic Consulting / Business Advisory Services',null,null,null,null,null],
+['CITIZING',"Agence indépendante d'études et de conseil",null,null,null,null,null],
+['Command Strategy','Cabinet de conseil indépendant',null,null,null,null,null],
+['Compass Lexecon',null,null,null,null,null,null],
+['Consort Group','Technologies de l’information / Services informatiques et transformation numérique',null,null,null,null,null],
+['Copenhagen Economics','International consulting firm',null,null,null,null,null],
+['Cornerstone Research','Economic and Financial consulting',null,null,null,null,null],
+['Deloitte - Economic Advisory',"Cabinet d'Audit et de Conseil",null,null,null,null,null],
+['Direction Générale de la concurrence, de la consommation et de la répression des fraudes','Direction du ministère de l’Économie',null,null,null,null,null],
+['Direction générale des entreprises',"Au service du ministre chargé de l'Economie et des Finances",null,null,null,null,null],
+['Direction générale du Trésor',"Au service du ministre chargé de l'Economie et des Finances",null,null,null,null,null],
+['DKV Belgium','Health insurance provider',null,null,null,null,null],
+['E.CA Economics GmbH - a BRG company',null,null,null,null,null,null],
+['Econic Partners','Economic consulting firm',null,null,null,null,null],
+['Eight Advisory',null,null,null,null,null,null],
+['Eulidia','Cabinet de conseil',null,null,null,null,null],
+['European Commission','Executive cabinet of the European Union',null,null,null,null,null],
+['EY Consulting','Conseil en transformation, stratégie et technologie',null,null,null,null,null],
+['FORVIS MAZARS','Services professionnels : audit, conseil, fiscalité, juridique',null,null,null,null,null],
+['Frontier Economics',null,null,null,null,null,null],
+['GALEC - E.LECLERC','Commerce de détail et achats centralisés',null,null,null,null,null],
+['Generali',null,null,null,null,null,null],
+['Groupe La Poste','Services, logistique, services numériques, activités bancaires',null,null,null,null,null],
+['International Energy Agency (IEA)','Intergovernmental organisation',null,null,null,null,null],
+['La Cour des Comptes','Juridiction financière indépendante',null,null,null,null,null],
+['LeadSponsor','Plateforme de sponsoring sportif AI-native',null,null,null,null,null],
+['MAPP - KPMG','Cabinet de conseil',null,null,null,null,null],
+['OECD',null,null,null,null,null,null],
+['Oxera Consulting','Economic consulting and advisory services',null,null,null,null,null],
+['People Vox','Logistique et gestion des opérations pour le e-commerce',null,null,null,null,null],
+["PwC Société d'avocats",'Cabinet d’avocats / Conseil juridique et fiscal',null,null,null,null,null],
+['RBB Economics','Competition Economics Consulting',null,null,null,null,null],
+['Société Générale','Groupe de services financiers',null,null,null,null,null]];
+
+/* ---------------- Utilitaires ---------------- */
+const norm=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const titleName=s=>String(s).trim().toLowerCase().replace(/(^|[\s-])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());
+const uid=p=>p+Math.random().toString(36).slice(2,9);
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600)}
+
+/* ---------------- État ---------------- */
+const STORE='bnd-parrainages-2026-demo-v2';
+try{localStorage.removeItem('bnd-parrainages-2026-v1')}catch(e){}
+let S, sel=null, tab='resultat', editChoices=false, studentFilter='';
+function defaultParams(){return {wN:100,wE:10,wP:1,lvl:{M2:3,M1:2,L3:1},role:{board:3,actif:2,membre:1},engMode:'max',seed:2026,round2:true,assos:[...DEFAULT_ASSOS]}}
+function freshState(){
+  const st={companies:[],students:[],masters:JSON.parse(JSON.stringify(DEFAULT_MASTERS)),params:defaultParams(),imports:[]};
+  parseSynthesis([RAW_HEADER,...RAW],st,false);
+  st.students=makeFake(st,40,6,7);st.fake={n:40,K:6,seed:7};st.imports=[];
+  return st;
+}
+function save(){try{localStorage.setItem(STORE,JSON.stringify(S))}catch(e){}}
+function load(){try{const j=localStorage.getItem(STORE);if(j){const s=JSON.parse(j);if(s&&s.companies&&s.students)return s}}catch(e){}return null}
+
+/* ---------------- Correspondance des noms d'entreprises ---------------- */
+function findCompany(st,name){
+  const k=norm(name); if(!k) return null;
+  let c=st.companies.find(c=>norm(c.name)===k); if(c) return c;
+  const cands=st.companies.filter(c=>{const n=norm(c.name);return n.includes(k)||k.includes(n)});
+  if(cands.length===1) return cands[0];
+  const fw=k.split(' ')[0];
+  const c2=st.companies.filter(c=>norm(c.name).split(' ')[0]===fw);
+  return c2.length===1?c2[0]:null;
+}
+function ensureCompany(st,name,sector){
+  let c=st.companies.find(c=>norm(c.name)===norm(name));
+  if(!c){const d=COMPANY_DOMAINS[norm(name)]||['',''];c={id:uid('c'),name:String(name).trim(),sector:sector||'',d1:d[0],d2:d[1],cap:1};applyCompanyAff(c);st.companies.push(c)}
+  else if(sector&&!c.sector) c.sector=sector;
+  return c;
+}
+function ensureStudent(st,name){
+  const k=norm(name);let s=st.students.find(s=>s.key===k);
+  if(!s){s={id:uid('s'),name:titleName(name),key:k,niveau:'',master:'',assos:[],choices:[]};st.students.push(s)}
+  return s;
+}
+
+/* ---------------- Import : format synthèse (une ligne par entreprise) ---------------- */
+function parseSynthesis(rows,st,keepChoices){
+  const issues=[];
+  const head=rows[0].map(x=>String(x??'').trim());
+  const assoCols=head.map((h,i)=>({h,i})).filter(o=>o.i>=2&&o.h);
+  const entries={}; // studentKey -> [{cid,rank,order,asso}]
+  let order=0;
+  for(const r of rows.slice(1)){
+    if(!r||!r[0]) continue;
+    const c=ensureCompany(st,r[0],r[1]?String(r[1]).trim():'');
+    for(const {h,i} of assoCols){
+      const cell=r[i]; if(cell==null||String(cell).trim()==='') continue;
+      if(!st.params.assos.includes(h)) st.params.assos.push(h);
+      for(const part of String(cell).split(/[,;\n]+/)){
+        const p=part.trim(); if(!p) continue;
+        const m=p.match(/^(.+?)\s*\((\d+)\)\s*$/);
+        const name=m?m[1].trim():p, rank=m?+m[2]:null;
+        const s=ensureStudent(st,name);
+        if(!s.assos.some(a=>a.asso===h)) s.assos.push({asso:h,role:'membre'});
+        (entries[s.key]=entries[s.key]||[]).push({cid:c.id,rank,order:order++,asso:h});
+      }
+    }
+  }
+  for(const s of st.students){
+    const E=entries[s.key]; if(!E) continue;
+    const best={};
+    for(const e of E){const b=best[e.cid];if(!b||(e.rank??999)<(b.rank??999))best[e.cid]=e}
+    const L=Object.values(best).sort((a,b)=>(a.rank??999)-(b.rank??999)||a.order-b.order);
+    if(!keepChoices||!s.choices.length) s.choices=L.map(e=>e.cid);
+    const nm=n=>st.companies.find(c=>c.id===n).name;
+    const un=L.filter(e=>e.rank==null);
+    if(un.length) issues.push({sid:s.id,msg:`${s.name} : ${un.length} vœu(x) sans numéro (${un.map(e=>nm(e.cid)).join(', ')}) placé(s) en fin de liste`});
+    const rk=L.filter(e=>e.rank!=null).map(e=>e.rank);
+    const dup=rk.filter((x,i)=>rk.indexOf(x)!==i);
+    if(dup.length) issues.push({sid:s.id,msg:`${s.name} : numéro ${[...new Set(dup)].join(', ')} utilisé plusieurs fois, départagé par l'ordre du fichier`});
+  }
+  return {issues};
+}
+
+/* ---------------- Import : format formulaire (une ligne par élève) ---------------- */
+function parseForm(rows,st){
+  const head=rows[0].map(x=>norm(x));
+  const col=re=>head.findIndex(h=>re.test(h));
+  const iName=col(/^(nom|name|eleve|etudiant|prenom nom|nom prenom)/), iNiv=col(/niveau|level|annee|year/),
+        iMas=col(/master|formation|parcours|programme|program/), iAsso=col(/asso/), iRole=col(/role|engagement|statut/);
+  const choiceCols=head.map((h,i)=>{const m=h.match(/(choix|choice|voeu|veu|preference)\s*(n\s*)?(\d+)/);return m?{i,n:+m[3]}:null}).filter(Boolean).sort((a,b)=>a.n-b.n);
+  if(iName<0) throw new Error("Colonne « Nom » introuvable dans la première ligne.");
+  const issues=[];let n=0;
+  for(const r of rows.slice(1)){
+    const nm=r[iName]; if(!nm||!String(nm).trim()) continue; n++;
+    const s=ensureStudent(st,nm);
+    if(iNiv>=0&&r[iNiv]){const v=String(r[iNiv]).toUpperCase().match(/M2|M1|L3/);if(v)s.niveau=v[0]}
+    if(iMas>=0&&r[iMas]){const m=matchMaster(st,r[iMas]);if(m)s.master=m.id;else issues.push({sid:s.id,msg:`${s.name} : master « ${r[iMas]} » non reconnu (ajoute-le dans Règles)`})}
+    if(iAsso>=0&&r[iAsso]){
+      const txt=String(r[iAsso]);
+      const parts=txt.split(/[;\n]+/).map(x=>x.trim()).filter(Boolean);
+      const parsed=parts.map(p=>{const m=p.match(/^(.+?)\s*[:(]\s*([^)]*)\)?$/);return m?{asso:m[1].trim(),role:matchRole(m[2])}:{asso:p,role:iRole>=0?matchRole(r[iRole]):'membre'}});
+      if(parsed.length){s.assos=parsed.map(a=>({asso:matchAsso(st,a.asso),role:a.role||'membre'}))}
+    } else if(iRole>=0&&r[iRole]&&s.assos.length){s.assos.forEach(a=>a.role=matchRole(r[iRole])||a.role)}
+    if(choiceCols.length){
+      const L=[];
+      for(const {i} of choiceCols){const v=r[i];if(!v||!String(v).trim())continue;const c=findCompany(st,v);
+        if(c){if(!L.includes(c.id))L.push(c.id)}else issues.push({sid:s.id,msg:`${s.name} : entreprise « ${v} » introuvable`})}
+      s.choices=L;
+    }
+  }
+  return {issues,n};
+}
+function matchMaster(st,v){const k=norm(v);if(!k)return null;
+  return st.masters.find(m=>norm(m.label)===k)||st.masters.find(m=>norm(m.label).startsWith(k)||norm(m.id)===k)||st.masters.find(m=>norm(m.label).includes(k)||k.includes(norm(m.label.split('–')[0])))||null}
+function matchRole(v){const k=norm(v);if(!k)return 'membre';if(/board|bureau|president|vice|tresor|secret|respo|head|chef/.test(k))return 'board';if(/actif|active/.test(k))return 'actif';return 'membre'}
+function matchAsso(st,v){const k=norm(v);const a=st.params.assos.find(a=>norm(a)===k||norm(a).includes(k)||k.includes(norm(a)));if(a)return a;st.params.assos.push(String(v).trim());return String(v).trim()}
+
+/* ---------------- Calcul ---------------- */
+let R=null;
+function compute(){
+  const P=S.params, cmap=Object.fromEntries(S.companies.map(c=>[c.id,c])), mmap=Object.fromEntries(S.masters.map(m=>[m.id,m]));
+  // tirage au sort reproductible
+  const ids=[...S.students].sort((a,b)=>a.key<b.key?-1:1).map(s=>s.id), rng=mulberry32(+P.seed||0);
+  for(let i=ids.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]]}
+  const lot=Object.fromEntries(ids.map((id,i)=>[id,i+1]));
+  const eng={},lvl={};
+  for(const s of S.students){const pts=s.assos.map(a=>+P.role[a.role]||0);eng[s.id]=pts.length?(P.engMode==='sum'?pts.reduce((x,y)=>x+y,0):Math.max(...pts)):0;lvl[s.id]=+P.lvl[s.niveau]||0}
+  const smap=Object.fromEntries(S.students.map(s=>[s.id,s]));
+  const prox=(sid,cid)=>{const s=smap[sid],m=mmap[s.master],c=cmap[cid];if(!m||!c)return 0;
+    if(c.aff&&c.aff[m.id]!=null)return +c.aff[m.id];let v=0;if(c.d1)v=Math.max(v,+m.aff[c.d1]||0);if(c.d2)v=Math.max(v,(+m.aff[c.d2]||0)*0.5);return v};
+  const pc={};const prio=(sid,cid)=>{const k=sid+'|'+cid;if(!(k in pc))pc[k]=(+P.wN)*lvl[sid]+(+P.wE)*eng[sid]+(+P.wP)*prox(sid,cid);return pc[k]};
+  const better=(a,b,c)=>prio(b,c)-prio(a,c)||lot[a]-lot[b]; // tri décroissant
+  function da(sids,lists,caps){
+    const next={},held={};for(const c in caps)held[c]=[];
+    const free=[...sids];sids.forEach(s=>next[s]=0);
+    while(free.length){const s=free.shift();const L=lists[s]||[];if(next[s]>=L.length)continue;const c=L[next[s]++];
+      if(!(c in held)||caps[c]<=0){free.unshift(s);continue}
+      held[c].push(s);held[c].sort((a,b)=>better(a,b,c));if(held[c].length>caps[c])free.push(held[c].pop())}
+    return held;
+  }
+  const caps=Object.fromEntries(S.companies.map(c=>[c.id,Math.max(0,+c.cap||0)]));
+  const lists=Object.fromEntries(S.students.map(s=>[s.id,s.choices.filter(c=>c in caps)]));
+  const held1=da(S.students.map(s=>s.id),lists,caps);
+  const asg={};for(const c in held1)for(const s of held1[c])asg[s]={cid:c,round:1};
+  let held2={};
+  if(P.round2){
+    const rest=S.students.filter(s=>!asg[s.id]&&s.choices.length).map(s=>s.id);
+    const caps2=Object.fromEntries(S.companies.map(c=>[c.id,caps[c.id]-held1[c.id].length]));
+    const open=S.companies.filter(c=>caps2[c.id]>0);
+    const l2=Object.fromEntries(rest.map(sid=>[sid,[...open].sort((a,b)=>prox(sid,b.id)-prox(sid,a.id)||a.name.localeCompare(b.name)).map(c=>c.id)]));
+    held2=da(rest,l2,caps2);
+    for(const c in held2)for(const s of held2[c])asg[s]={cid:c,round:2};
+  }
+  const holders=Object.fromEntries(S.companies.map(c=>[c.id,[...held1[c.id],...(held2[c.id]||[])]]));
+  for(const s of S.students){const a=asg[s.id];if(a){const i=s.choices.indexOf(a.cid);a.rank=i>=0?i+1:null}}
+  // vérification de stabilité (paires bloquantes sur les vœux déclarés)
+  let blocking=0;
+  for(const s of S.students){const a=asg[s.id];const L=lists[s.id];const lim=a&&a.rank?a.rank-1:L.length;
+    for(let i=0;i<lim;i++){const c=L[i];const H=holders[c];if(H.length<caps[c]){blocking++;continue}
+      if(H.some(h=>better(s.id,h,c)<0))blocking++}}
+  R={asg,holders,lot,eng,lvl,prox,prio,caps,blocking,cmap,mmap};
+}
+
+/* ---------------- Rendu ---------------- */
+const TABS=[['resultat','Résultat'],['eleves','Élèves'],['entreprises','Entreprises'],['regles','Règles & proximité'],['donnees','Import / export']];
+function render(){
+  compute(); save();
+  renderSummary();
+  document.getElementById('banner').innerHTML=S.fake?`<div class="banner"><span>Démo : ${S.fake.n} élèves fictifs, ${S.fake.K} vœux chacun (graine ${S.fake.seed}). Importe ton fichier pour les remplacer par les vrais.</span><button class="btn" data-tab="donnees">Régénérer ou importer</button></div>`:'';
+  document.getElementById('tabs').innerHTML=TABS.map(([id,l])=>{
+    const ct=id==='eleves'?S.students.length:id==='entreprises'?S.companies.length:null;
+    return `<button role="tab" aria-selected="${tab===id}" data-tab="${id}">${l}${ct!=null?`<span class="ct">${ct}</span>`:''}</button>`}).join('');
+  const v=document.getElementById('view');
+  v.innerHTML=({resultat:viewResult,eleves:viewStudents,entreprises:viewCompanies,regles:viewRules,donnees:viewData})[tab]();
+}
+function rkChip(r,round){if(!r)return round===2?'<span class="chip warn">2ᵉ tour</span>':'<span class="rk rk0">–</span>';return `<span class="rk rk${Math.min(r,4)}">${r}</span>`}
+function renderSummary(){
+  const n=S.students.length, a=Object.values(R.asg), seats=Object.values(R.caps).reduce((x,y)=>x+y,0);
+  const r1=a.filter(x=>x.rank===1).length, top3=a.filter(x=>x.rank&&x.rank<=3).length, none=n-a.length;
+  const pct=x=>n?Math.round(100*x/n)+' %':'–';
+  const missing=S.students.filter(s=>!s.niveau||!s.master).length;
+  document.getElementById('summary').innerHTML=[
+    [n,'élèves'],[seats,'places ('+S.companies.length+' entreprises)'],[pct(r1),'ont leur choix n° 1'],[pct(top3),'ont un choix du top 3'],[none,'sans parrainage'],[missing,'fiches incomplètes']
+  ].map(([v,l])=>`<div><span class="v">${v}</span><span class="l">${l}</span></div>`).join('');
+  const buckets=[['1',x=>x.rank===1,'var(--accent)'],['2',x=>x.rank===2,'var(--r2)'],['3',x=>x.rank===3,'var(--r3)'],['4 et +',x=>x.rank>=4,'var(--r4)'],['2ᵉ tour',x=>x.round===2&&!x.rank,'var(--warn)']];
+  const counts=buckets.map(([l,f,c])=>[l,a.filter(f).length,c]);counts.push(['aucun',none,'var(--bad)']);
+  document.getElementById('distbar').innerHTML=counts.filter(c=>c[1]).map(([l,k,c])=>`<span style="width:${100*k/Math.max(n,1)}%;background:${c}" title="${l} : ${k}"></span>`).join('');
+  document.getElementById('distLegend').innerHTML=counts.map(([l,k,c])=>`<span><i style="background:${c}"></i>${l} · <span class="num">${k}</span></span>`).join('');
+  document.getElementById('stabBadge').innerHTML=R.blocking===0?'<span class="chip ok">✓ Affectation stable · 0 paire bloquante</span>':`<span class="chip bad">${R.blocking} paire(s) bloquante(s)</span>`;
+}
+function cname(id){return R.cmap[id]?R.cmap[id].name:'?'}
+function sname(id){const s=S.students.find(s=>s.id===id);return s?s.name:'?'}
+function niveauChip(s){return s.niveau?`<span class="chip acc">${s.niveau}</span>`:'<span class="chip warn">niveau ?</span>'}
+function masterShort(s){const m=R.mmap[s.master];return m?esc(m.label.split(' – ')[0]):'<span class="chip warn">master ?</span>'}
+function engLabel(s){return s.assos.length?s.assos.map(a=>`${esc(shortAsso(a.asso))} · ${ROLES.find(r=>r.id===a.role)?.label||a.role}`).join('<br>'):'<span class="muted">aucune</span>'}
+function shortAsso(a){return({'Bureau Des Étudiants':'BDE','Bureau Des Sports':'BDS','Junior Etudes':'JE'})[a]||a}
+
+function explainCard(sid){
+  const s=S.students.find(x=>x.id===sid); if(!s) return '';
+  const a=R.asg[s.id];
+  const items=s.choices.map((cid,i)=>{
+    const me=R.prio(s.id,cid), H=R.holders[cid]||[], cap=R.caps[cid];
+    let out;
+    if(a&&a.cid===cid) out='<span class="chip ok">obtenu</span>';
+    else if(a&&a.rank&&i+1>a.rank) out='<span class="muted">non utilisé (un vœu mieux classé a été obtenu)</span>';
+    else if(cap===0) out='<span class="chip bad">aucune place ouverte</span>';
+    else{const last=H[H.length-1];const tie=R.prio(last,cid)===me;
+      out=`pris par ${H.map(h=>`<b>${esc(sname(h))}</b> <span class="num">(${fmt(R.prio(h,cid))})</span>`).join(', ')}${tie?' · égalité départagée par le tirage':''}`}
+    return `<li>${rkChip(i+1)} <b>${esc(cname(cid))}</b> · ta priorité <span class="num">${fmt(me)}</span> = ${fmtDetail(s.id,cid)}<br>${out}</li>`}).join('');
+  return `<div class="card">
+    <div class="row"><h2>${esc(s.name)}</h2>${niveauChip(s)}${s.master?`<span class="chip">${masterShort(s)}</span>`:masterShort(s)}<span class="spacer"></span><button class="btn ghost" data-act="unsel">Fermer</button></div>
+    <div>${a?`Affecté·e à <b>${esc(cname(a.cid))}</b> ${a.rank?`(vœu n° ${a.rank})`:'(2ᵉ tour, entreprise avec places restantes la plus proche de sa formation)'}`:'<b>Aucune affectation</b> : tous ses vœux sont pris par des élèves prioritaires.'}</div>
+    <ol class="plain explain" style="list-style:none;padding:0">${items||'<li class="muted">Aucun vœu saisi.</li>'}</ol>
+    <p class="note">Tirage au sort : n° <span class="num">${R.lot[s.id]}</span> (sert seulement à départager deux priorités égales).</p></div>`;
+}
+const fmt=x=>Number.isInteger(x)?String(x):x.toFixed(1);
+function fmtDetail(sid,cid){const P=S.params;return `<span class="num">${P.wN}×${R.lvl[sid]} + ${P.wE}×${R.eng[sid]} + ${P.wP}×${fmt(R.prox(sid,cid))}</span>`}
+
+function levelStats(){
+  const groups=[...NIVEAUX,''].map(n=>{const g=S.students.filter(s=>s.niveau===n);if(!g.length)return null;
+    const a=g.map(s=>R.asg[s.id]).filter(Boolean);
+    const prox=g.filter(s=>R.asg[s.id]).map(s=>R.prox(s.id,R.asg[s.id].cid));
+    const pct=v=>Math.round(100*v/g.length)+' %';
+    return [n||'?',g.length,pct(a.filter(x=>x.rank===1).length),pct(a.filter(x=>x.rank&&x.rank<=3).length),g.length-a.length,a.filter(x=>x.round===2).length,prox.length?(prox.reduce((x,y)=>x+y,0)/prox.length).toFixed(2):'–']}).filter(Boolean);
+  if(groups.length<2&&groups[0]&&groups[0][0]==='?')return '';
+  return `<div class="tablebox"><table><thead><tr><th>Niveau</th><th class="r">Élèves</th><th class="r">Choix n° 1</th><th class="r">Top 3</th><th class="r">Sans parrainage</th><th class="r">Placés au 2ᵉ tour</th><th class="r">Proximité moy. (0–2)</th></tr></thead><tbody>
+   ${groups.map(r=>`<tr>${r.map((v,i)=>`<td class="${i?'r num':''}">${i?v:`<b>${v}</b>`}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function viewResult(){
+  const rows=[...S.students].sort((a,b)=>{const x=R.asg[a.id],y=R.asg[b.id];return (x?(x.rank||50):99)-(y?(y.rank||50):99)||a.name.localeCompare(b.name)});
+  const unmatched=S.students.filter(s=>!R.asg[s.id]);
+  const free=S.companies.filter(c=>R.caps[c.id]>(R.holders[c.id]||[]).length);
+  return `<section class="panel">
+   ${sel?explainCard(sel):''}
+   ${levelStats()}
+   ${S.imports.length?`<div class="card" style="border-color:var(--warn)"><div class="row"><h3>Points à vérifier dans les vœux</h3><span class="chip warn">${S.imports.length}</span></div><ul style="margin:0;padding-left:18px">${S.imports.map(i=>`<li>${esc(i.msg)}</li>`).join('')}</ul></div>`:''}
+   <div class="tablebox"><table><thead><tr><th>Élève</th><th>Niveau</th><th>Master</th><th>Engagement</th><th>Entreprise attribuée</th><th>Vœu</th><th class="r">Priorité</th></tr></thead><tbody>
+   ${rows.map(s=>{const a=R.asg[s.id];return `<tr class="click${sel===s.id?' sel':''}" data-sel="${s.id}"><td><b>${esc(s.name)}</b></td><td>${niveauChip(s)}</td><td>${masterShort(s)}</td><td class="num">${R.eng[s.id]}</td>
+     <td>${a?esc(cname(a.cid)):'<span class="chip bad">aucune</span>'}</td><td>${a?rkChip(a.rank,a.round):rkChip(0)}</td><td class="r num">${a?fmt(R.prio(s.id,a.cid)):'–'}</td></tr>`}).join('')}
+   </tbody></table></div>
+   <p class="note">Clique sur un élève pour voir, vœu par vœu, pourquoi il a obtenu (ou pas) chaque entreprise. C'est l'argument à donner en cas de contestation.</p>
+   <div class="grid2">
+    <div class="card"><h3>Sans parrainage (${unmatched.length})</h3>${unmatched.length?`<div class="choices">${unmatched.map(s=>`<span class="chip bad">${esc(s.name)}</span>`).join('')}</div>`:'<span class="muted">Tout le monde est affecté.</span>'}</div>
+    <div class="card"><h3>Places encore libres (${free.reduce((k,c)=>k+R.caps[c.id]-R.holders[c.id].length,0)})</h3><div class="choices">${free.map(c=>`<span class="chip">${esc(c.name)} · ${R.caps[c.id]-R.holders[c.id].length}</span>`).join('')||'<span class="muted">Aucune.</span>'}</div></div>
+   </div></section>`;
+}
+
+function viewStudents(){
+  const q=norm(studentFilter);
+  const list=S.students.filter(s=>!q||s.key.includes(q)).sort((a,b)=>a.name.localeCompare(b.name));
+  const mopts=v=>`<option value="">— master ? —</option>`+S.masters.map(m=>`<option value="${m.id}"${m.id===v?' selected':''}>${esc(m.label)}</option>`).join('');
+  return `<section class="panel">
+   ${sel?studentEditor(sel):''}
+   <div class="row"><input type="search" id="sfilter" placeholder="Rechercher un élève" value="${esc(studentFilter)}" aria-label="Rechercher un élève"><span class="spacer"></span>
+   <button class="btn" data-act="bulkLevel">Niveau manquant → M1</button><button class="btn primary" data-act="addStudent">Ajouter un élève</button></div>
+   <div class="tablebox"><table><thead><tr><th>Élève</th><th>Niveau</th><th>Master</th><th>Associations · rôle</th><th class="r">Engag.</th><th>Vœux (ordre)</th><th class="r">Tirage</th></tr></thead><tbody>
+   ${list.map(s=>`<tr class="${sel===s.id?'sel':''}"><td><button class="btn ghost" data-sel="${s.id}"><b>${esc(s.name)}</b></button></td>
+     <td><select data-f="niveau" data-id="${s.id}" aria-label="Niveau de ${esc(s.name)}"><option value="">?</option>${NIVEAUX.map(n=>`<option${s.niveau===n?' selected':''}>${n}</option>`).join('')}</select></td>
+     <td><select data-f="master" data-id="${s.id}" style="max-width:210px" aria-label="Master de ${esc(s.name)}">${mopts(s.master)}</select></td>
+     <td>${s.assos.map((a,i)=>`<div class="row" style="gap:4px;flex-wrap:nowrap"><span class="muted" style="font-size:12px;min-width:34px">${esc(shortAsso(a.asso))}</span><select data-f="role" data-id="${s.id}" data-i="${i}" aria-label="Rôle">${ROLES.map(r=>`<option value="${r.id}"${a.role===r.id?' selected':''}>${r.label}</option>`).join('')}</select></div>`).join('')||'<span class="muted">aucune</span>'}</td>
+     <td class="r num">${R.eng[s.id]}</td>
+     <td><div class="choices">${s.choices.map((c,i)=>`<span class="chip"><b>${i+1}</b>${esc(cname(c))}</span>`).join('')||'<span class="chip warn">aucun vœu</span>'}</div></td>
+     <td class="r num">${R.lot[s.id]}</td></tr>`).join('')}
+   </tbody></table></div></section>`;
+}
+function studentEditor(sid){
+  const s=S.students.find(x=>x.id===sid); if(!s) return '';
+  const avail=S.companies.filter(c=>!s.choices.includes(c.id)).sort((a,b)=>a.name.localeCompare(b.name));
+  return `<div class="card"><div class="row"><h2>Fiche · ${esc(s.name)}</h2><span class="spacer"></span><button class="btn danger" data-act="delStudent">Supprimer</button><button class="btn ghost" data-act="unsel">Fermer</button></div>
+   <div class="grid2">
+    <div style="display:flex;flex-direction:column;gap:10px">
+     <label class="fld">Nom<input type="text" id="ed-name" value="${esc(s.name)}"></label>
+     <div class="fld">Associations<div style="display:flex;flex-direction:column;gap:6px">
+      ${s.assos.map((a,i)=>`<div class="row" style="gap:6px"><span style="min-width:150px;color:var(--ink);font-weight:500">${esc(a.asso)}</span><select data-f="role" data-id="${s.id}" data-i="${i}" aria-label="Rôle">${ROLES.map(r=>`<option value="${r.id}"${a.role===r.id?' selected':''}>${r.label}</option>`).join('')}</select><button class="icon" data-act="delAsso" data-i="${i}" aria-label="Retirer">×</button></div>`).join('')}
+      <div class="row" style="gap:6px"><select id="ed-asso" aria-label="Ajouter une association">${S.params.assos.filter(x=>!s.assos.some(a=>a.asso===x)).map(x=>`<option>${esc(x)}</option>`).join('')}</select><button class="btn" data-act="addAsso">Ajouter</button></div>
+     </div></div>
+    </div>
+    <div class="fld">Vœux, du préféré au moins préféré
+     <ol class="plain" style="display:flex;flex-direction:column;gap:4px;padding:0;list-style:none">
+      ${s.choices.map((c,i)=>`<li class="row" style="gap:6px;flex-wrap:nowrap">${rkChip(i+1)}<span style="flex:1;color:var(--ink);font-weight:500;min-width:0">${esc(cname(c))}</span>
+        <button class="icon" data-act="up" data-i="${i}" ${i===0?'disabled':''} aria-label="Monter">↑</button><button class="icon" data-act="down" data-i="${i}" ${i===s.choices.length-1?'disabled':''} aria-label="Descendre">↓</button><button class="icon" data-act="rmChoice" data-i="${i}" aria-label="Retirer">×</button></li>`).join('')}
+     </ol>
+     <div class="row" style="gap:6px"><select id="ed-add" style="flex:1;min-width:0" aria-label="Ajouter un vœu">${avail.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><button class="btn" data-act="addChoice">Ajouter le vœu</button></div>
+    </div>
+   </div></div>`;
+}
+
+const MSHORT={d3s:'D3S',med:'MED',se:'S&É',eee:'EEE',emo:'EMO',egr:'EGR',ecl:'ECL',fin:'Finance',eco:'M1 Eco',ppd:'PPD',eep:'EEP',ae:'M1 AE',ea:'EA',ete:'ETE',l3:'L3'};
+function mShort(m){return MSHORT[m.id]||m.label.split(' – ')[0].split(' (')[0].slice(0,12)}
+function compAff(c,m){if(c.aff&&c.aff[m.id]!=null)return +c.aff[m.id];let v=0;if(c.d1)v=Math.max(v,+m.aff[c.d1]||0);if(c.d2)v=Math.max(v,(+m.aff[c.d2]||0)*0.5);return v}
+function topMasters(c){const xs=S.masters.filter(m=>m.id!=='l3').map(m=>[m,compAff(c,m)]).filter(x=>x[1]>=1).sort((a,b)=>b[1]-a[1]);
+  return xs.map(([m,v])=>`<span class="chip${v>=2?' acc':''}" style="font-size:11px">${esc(mShort(m))}</span>`).join('')||'<span class="muted" style="font-size:12px">aucun lien fort</span>'}
+function viewCompanies(){
+  const dem={},first={};for(const s of S.students)s.choices.forEach((c,i)=>{dem[c]=(dem[c]||0)+1;if(i===0)first[c]=(first[c]||0)+1});
+  const dopt=(v,blank)=>(blank?'<option value="">—</option>':'')+DOMAINS.map(d=>`<option value="${d.id}"${d.id===v?' selected':''}>${d.label}</option>`).join('');
+  const list=[...S.companies].sort((a,b)=>(first[b.id]||0)-(first[a.id]||0)||(dem[b.id]||0)-(dem[a.id]||0)||a.name.localeCompare(b.name));
+  return `<section class="panel">
+   <div class="row"><p class="note" style="margin:0">Trié par nombre de choix n° 1. <b>Capacité</b> = nombre d'élèves que l'entreprise parraine. Mets 0 si elle ne parraine personne.</p><span class="spacer"></span>
+   <label class="row" style="gap:6px">Toutes à <input type="number" id="capAll" min="0" value="1" class="sm"></label><button class="btn" data-act="capAll">Appliquer</button><button class="btn primary" data-act="addCompany">Ajouter</button></div>
+   <div class="tablebox"><table><thead><tr><th>Entreprise</th><th>Lien avec les masters TSE</th><th>Domaine principal</th><th>Domaine secondaire</th><th class="r">Choix 1</th><th class="r">Demandes</th><th class="r">Capacité</th><th>Attribuée à</th><th></th></tr></thead><tbody>
+   ${list.map(c=>`<tr><td><b>${esc(c.name)}</b><div class="muted" style="font-size:12px;max-width:200px">${esc(c.sector)}</div></td><td style="min-width:240px;max-width:340px">${c.why?`<div style="font-size:12px;margin-bottom:4px">${esc(c.why)}</div>`:''}<div class="choices">${topMasters(c)}</div></td>
+    <td><select data-cf="d1" data-id="${c.id}" aria-label="Domaine principal">${dopt(c.d1,true)}</select></td>
+    <td><select data-cf="d2" data-id="${c.id}" aria-label="Domaine secondaire">${dopt(c.d2,true)}</select></td>
+    <td class="r num">${first[c.id]||0}</td><td class="r num">${dem[c.id]||0}</td>
+    <td class="r"><input type="number" class="sm" min="0" data-cf="cap" data-id="${c.id}" value="${c.cap}" aria-label="Capacité"></td>
+    <td>${(R.holders[c.id]||[]).map(h=>`<span class="chip">${esc(sname(h))}</span>`).join(' ')||'<span class="muted">–</span>'}</td>
+    <td><button class="icon" data-act="delCompany" data-id="${c.id}" aria-label="Supprimer ${esc(c.name)}">×</button></td></tr>`).join('')}
+   </tbody></table></div></section>`;
+}
+
+function viewRules(){
+  const P=S.params;
+  const maxE=Math.max(...Object.values(P.role).map(Number))*(P.engMode==='sum'?S.params.assos.length:1);
+  const lexOK=(+P.wE)*maxE+(+P.wP)*2<(+P.wN) && (+P.wP)*2<(+P.wE);
+  return `<section class="panel">
+  <div class="grid2">
+   <div class="card"><h2>Priorité d'un élève pour une entreprise</h2>
+    <div class="formula">priorité = ${P.wN} × niveau + ${P.wE} × engagement + ${P.wP} × proximité</div>
+    <div class="row">
+     <label class="fld">Poids niveau<input type="number" data-p="wN" value="${P.wN}"></label>
+     <label class="fld">Poids engagement<input type="number" data-p="wE" value="${P.wE}"></label>
+     <label class="fld">Poids proximité<input type="number" step="0.5" data-p="wP" value="${P.wP}"></label>
+    </div>
+    ${lexOK?'<span class="chip ok" style="align-self:flex-start">Ordre strict : niveau, puis engagement, puis proximité</span>':'<span class="chip warn" style="align-self:flex-start">Les critères se compensent : un fort engagement peut passer devant un niveau supérieur</span>'}
+    <div class="row">
+     ${NIVEAUX.map(n=>`<label class="fld">Points ${n}<input type="number" class="sm" data-lvl="${n}" value="${P.lvl[n]}"></label>`).join('')}
+    </div>
+    <div class="row">
+     ${ROLES.map(r=>`<label class="fld">${r.label}<input type="number" class="sm" data-role="${r.id}" value="${P.role[r.id]}"></label>`).join('')}
+     <label class="fld">Plusieurs assos<select data-p="engMode"><option value="max"${P.engMode==='max'?' selected':''}>meilleur rôle</option><option value="sum"${P.engMode==='sum'?' selected':''}>somme des rôles</option></select></label>
+    </div>
+    <div class="row">
+     <label class="fld">Graine du tirage<input type="number" data-p="seed" value="${P.seed}"></label>
+     <label class="row" style="gap:6px;align-self:flex-end"><input type="checkbox" id="round2" ${P.round2?'checked':''}> 2ᵉ tour pour les élèves sans parrainage</label>
+    </div>
+    <p class="note">Proximité (0 à 2) = la case entreprise × master du tableau ci-dessous. Pour une entreprise ou un master ajouté, sans case renseignée, elle se déduit des domaines : affinité du master avec le domaine principal, ou la moitié de celle avec le domaine secondaire. <b>Le rang du vœu n'entre jamais dans la priorité</b> : c'est ce qui rend le mécanisme sans intérêt à mentir.</p>
+   </div>
+   <div class="card"><h2>Comment ça marche</h2>
+    <ol class="plain">
+     <li>Chaque élève demande l'entreprise en tête de sa liste.</li>
+     <li>Chaque entreprise garde provisoirement les élèves de plus haute priorité, dans la limite de ses places, et refuse les autres.</li>
+     <li>Un élève refusé demande son vœu suivant. Une entreprise peut lâcher un élève gardé si un candidat plus prioritaire arrive.</li>
+     <li>On s'arrête quand plus personne n'est refusé. Égalité de priorité : le tirage au sort départage.</li>
+    </ol>
+    <p class="note"><b>À dire aux élèves :</b> classez les entreprises dans votre vrai ordre de préférence, et classez-en le plus possible. Mettre une entreprise demandée en n° 1 ne fait rien perdre sur les suivantes. Avec seulement 3 vœux, un élève peu prioritaire risque de n'avoir rien au 1er tour.</p>
+    <p class="note">Le 2ᵉ tour (optionnel) place les élèves restants dans les entreprises qui ont encore des places, par proximité avec leur formation. Il ne touche pas aux affectations du 1er tour.</p>
+   </div>
+  </div>
+  <div class="card"><div class="row"><h2>Proximité entreprise × master</h2><span class="spacer"></span><span class="legend"><span><i style="background:var(--accent)"></i>2 débouché naturel</span><span><i style="background:var(--r3)"></i>1 voisin</span><span><i style="background:var(--sunk)"></i>0</span></span></div>
+   <p class="note" style="margin:0">Clique sur une case pour la faire passer de 0 à 1 à 2. La justification de chaque ligne est dans l'onglet Entreprises.</p>
+   <div class="tablebox" style="max-height:560px"><table class="matrix heat"><thead><tr><th>Entreprise</th>${S.masters.map(m=>`<th title="${esc(m.label)}" style="font-size:10px">${esc(mShort(m))}</th>`).join('')}</tr></thead><tbody>
+    ${[...S.companies].sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<tr><td style="white-space:nowrap;font-size:12px">${esc(c.name.length>34?c.name.slice(0,32)+'…':c.name)}</td>${S.masters.map(m=>{const v=compAff(c,m);const set=c.aff&&c.aff[m.id]!=null;return `<td style="padding:2px"><button class="hc h${Math.round(v)}${set?'':' inf'}" data-act="cycle" data-c="${c.id}" data-m="${m.id}" aria-label="${esc(c.name)} × ${esc(m.label)} : ${fmt(v)}">${fmt(v)}</button></td>`}).join('')}</tr>`).join('')}
+   </tbody></table></div></div>
+  <div class="card"><div class="row"><h2>Affinité master × domaine</h2><span class="spacer"></span><button class="btn" data-act="addMaster">Ajouter un master</button></div>
+   <p class="note" style="margin:0">2 = cœur de métier, 1 = voisin, 0 = éloigné. Pré-rempli d'après les masters TSE ; ajuste librement.</p>
+   <div class="tablebox"><table class="matrix"><thead><tr><th>Master</th>${DOMAINS.map(d=>`<th title="${d.label}">${d.label.split(' ')[0].replace(/[.,]/g,'')}</th>`).join('')}<th></th></tr></thead><tbody>
+    ${S.masters.map(m=>`<tr><td><input type="text" data-ml="${m.id}" value="${esc(m.label)}" style="width:280px" aria-label="Nom du master"></td>${DOMAINS.map(d=>`<td><select data-m="${m.id}" data-d="${d.id}" aria-label="${esc(m.label)} × ${d.label}">${[0,1,2].map(v=>`<option${(+m.aff[d.id]||0)===v?' selected':''}>${v}</option>`).join('')}</select></td>`).join('')}<td><button class="icon" data-act="delMaster" data-id="${m.id}" aria-label="Supprimer">×</button></td></tr>`).join('')}
+   </tbody></table></div>
+   <div class="legend">${DOMAINS.map(d=>`<span><b>${d.label.split(' ')[0].replace(/[.,]/g,'')}</b> = ${d.label}</span>`).join('')}</div>
+  </div></section>`;
+}
+
+function viewData(){
+  return `<section class="panel"><div class="grid2">
+   <div class="card"><h2>1 · Compléter les fiches dans Excel</h2>
+    <p class="note" style="margin:0">Télécharge la liste des élèves avec leurs vœux actuels, remplis <b>Niveau</b>, <b>Master</b> et le rôle dans <b>Associations</b> (format <span class="num">TSEconomist: Board; BDE: Membre</span>), puis réimporte le fichier. L'onglet « Valeurs » liste les libellés acceptés.</p>
+    <div class="row"><button class="btn primary" data-act="dlTemplate">Télécharger le modèle Excel</button></div>
+   </div>
+   <div class="card"><h2>2 · Importer</h2>
+    <p class="note" style="margin:0">Accepte un .xlsx ou .csv au format <b>formulaire</b> (une ligne par élève : Nom, Niveau, Master, Associations, Choix 1, Choix 2…, par exemple un export Google Forms) ou au format <b>synthèse</b> (une ligne par entreprise, une colonne par asso, comme le fichier BND). Le premier import remplace les élèves fictifs ; ensuite, les infos déjà saisies sont conservées si le fichier ne les contient pas.</p>
+    <div class="row"><label class="btn primary" for="fileIn">Choisir un fichier</label><input type="file" id="fileIn" accept=".xlsx,.xls,.csv" hidden></div>
+    <div id="importReport"></div>
+   </div>
+   <div class="card"><h2>3 · Exporter le résultat</h2>
+    <p class="note" style="margin:0">Classeur avec trois onglets : affectations par élève, par entreprise, et détail des priorités pour chaque vœu.</p>
+    <div class="row"><button class="btn primary" data-act="dlResult">Télécharger les résultats (.xlsx)</button><button class="btn" data-act="copyResult">Copier le tableau</button></div>
+   </div>
+   <div class="card"><h2>Générer des élèves fictifs</h2>
+    <p class="note" style="margin:0">Remplace tous les élèves par des élèves inventés : niveau (40 % M2, 35 % M1, 25 % L3), master cohérent avec le niveau, une ou deux assos avec un rôle. Leurs vœux mélangent la popularité observée des entreprises, la proximité avec leur master et du hasard. Change la graine pour un autre tirage.</p>
+    <div class="row">
+     <label class="fld">Nombre d'élèves<input type="number" id="fk-n" value="${S.fake?S.fake.n:40}" min="1" max="300"></label>
+     <label class="fld">Vœux par élève<input type="number" id="fk-k" value="${S.fake?S.fake.K:6}" min="1" max="44"></label>
+     <label class="fld">Graine<input type="number" id="fk-seed" value="${S.fake?S.fake.seed:7}"></label>
+    </div>
+    <div class="row"><button class="btn primary" data-act="fake">Générer et affecter</button></div>
+   </div>
+   <div class="card"><h2>Sauvegarde</h2>
+    <p class="note" style="margin:0">Tes modifications restent dans ce navigateur. Pour les transmettre à quelqu'un du bureau, exporte la configuration complète et il l'importe ici.</p>
+    <div class="row"><button class="btn" data-act="dlJson">Exporter la configuration</button><label class="btn" for="jsonIn">Importer une configuration</label><input type="file" id="jsonIn" accept=".json" hidden><button class="btn danger" data-act="reset">Revenir à la démo de départ</button></div>
+    <div id="resetConfirm"></div>
+   </div>
+  </div></section>`;
+}
+
+/* ---------------- Élèves fictifs (test) ---------------- */
+const FAKE_NAMES=['Inès','Hugo','Léa','Nathan','Chloé','Lucas','Elsa','Yanis','Camille','Théo','Sarah','Louis','Jade','Adam','Emma','Rayan','Lina','Arthur','Zoé','Malo','Lou','Noah','Alice','Sacha','Mila','Paul','Anna','Rémi','Nora','Victor','Eva','Jules','Salomé','Tom','Maëlle','Ilyes','Romane','Gabin','Clémence','Yasmine','Bastien','Lucie','Karim','Agathe','Mehdi','Juliette','Enzo','Margaux','Samuel','Océane','Diego','Léonie','Antoine','Aya','Félix','Héloïse','Omar','Pauline','Simon','Laura'];
+const LETTERS='ABCDEFGHJKLMNPRSTV';
+const M2_POOL=['d3s','med','se','eee','emo','egr','ecl','fin','ppd','eep','ea','ete'], M1_POOL=['d3s','med','se','eco','ae','ecl','ea'];
+function makeFake(st,n,K,seed){
+  const rng=mulberry32(seed), pick=a=>a[Math.floor(rng()*a.length)], gumbel=()=>-Math.log(-Math.log(rng()+1e-12)+1e-12);
+  const pop=Object.fromEntries(st.companies.map(c=>[c.id,Math.log1p(POP[norm(c.name)]||0)]));
+  const out=[];
+  for(let i=0;i<n;i++){
+    const u=rng(), niveau=u<.4?'M2':u<.75?'M1':'L3';
+    const master=niveau==='M2'?pick(M2_POOL):niveau==='M1'?pick(M1_POOL):'l3';
+    const m=st.masters.find(x=>x.id===master);
+    const nA=rng()<.15?2:1, assos=[];
+    while(assos.length<nA){const a=pick(st.params.assos);if(!assos.some(x=>x.asso===a)){const r=rng();assos.push({asso:a,role:r<.2?'board':r<.55?'actif':'membre'})}}
+    const util=st.companies.map(c=>[c.id,pop[c.id]+1.2*(m?compAff(c,m):0)+0.7*gumbel()]).sort((a,b)=>b[1]-a[1]);
+    const name=FAKE_NAMES[i%FAKE_NAMES.length]+' '+LETTERS[(i*7)%LETTERS.length]+'.';
+    out.push({id:uid('f'),name,key:norm(name)+' '+i,niveau,master,assos,choices:util.slice(0,K).map(x=>x[0])});
+  }
+  return out;
+}
+
+/* ---------------- Exports ---------------- */
+async function offer(filename,data){
+  try{const d=await (window.claude?.use?window.claude.use('downloads'):null);
+    if(!d){const blob=data instanceof Blob?data:new Blob([data]);const u=URL.createObjectURL(blob);const l=document.createElement('a');l.href=u;l.download=filename;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Fichier téléchargé');return}
+    await d.save({filename,data});toast('Fichier enregistré')}
+  catch(e){if(e&&e.code==='declined')return;toast("Le téléchargement n'a pas abouti : "+(e&&e.message||e))}
+}
+function wbToBuf(sheets){const wb=XLSX.utils.book_new();for(const [n,aoa,w] of sheets){const ws=XLSX.utils.aoa_to_sheet(aoa);if(w)ws['!cols']=w.map(x=>({wch:x}));XLSX.utils.book_append_sheet(wb,ws,n)}return XLSX.write(wb,{type:'array',bookType:'xlsx'})}
+const mlabel=id=>(S.masters.find(m=>m.id===id)||{}).label||'';
+const roleLabel=r=>(ROLES.find(x=>x.id===r)||{}).label||r;
+function resultRows(){
+  return [['Élève','Niveau','Master','Engagement','Entreprise attribuée','Rang du vœu','Tour','Priorité'],
+   ...[...S.students].sort((a,b)=>a.name.localeCompare(b.name)).map(s=>{const a=R.asg[s.id];return [s.name,s.niveau,mlabel(s.master),R.eng[s.id],a?cname(a.cid):'—',a&&a.rank?a.rank:'',a?a.round:'',a?R.prio(s.id,a.cid):'']})];
+}
+function dlResult(){
+  const byC=[['Entreprise','Capacité','Élèves attribués','Places libres'],...S.companies.map(c=>[c.name,R.caps[c.id],R.holders[c.id].map(sname).join(', '),R.caps[c.id]-R.holders[c.id].length])];
+  const det=[['Élève','Rang','Entreprise','Niveau','Engagement','Proximité','Priorité','Tirage','Issue']];
+  for(const s of S.students){const a=R.asg[s.id];s.choices.forEach((c,i)=>det.push([s.name,i+1,cname(c),R.lvl[s.id],R.eng[s.id],R.prox(s.id,c),R.prio(s.id,c),R.lot[s.id],a&&a.cid===c?'obtenu':(a&&a.rank&&i+1>a.rank?'non utilisé':'pris par '+R.holders[c].map(sname).join(', '))]))}
+  offer('parrainages_BND_2026_resultats.xlsx',wbToBuf([['Affectations',resultRows(),[22,8,40,11,40,11,6,9]],['Par entreprise',byC,[45,9,40,11]],['Détail des vœux',det,[22,6,40,7,11,10,9,7,40]]]));
+}
+function dlTemplate(){
+  const K=Math.max(8,...S.students.map(s=>s.choices.length));
+  const head=['Nom','Niveau','Master','Associations',...Array.from({length:K},(_,i)=>'Choix '+(i+1))];
+  const rows=[...S.students].sort((a,b)=>a.name.localeCompare(b.name)).map(s=>[s.name,s.niveau,mlabel(s.master),s.assos.map(a=>`${a.asso}: ${roleLabel(a.role)}`).join('; '),...Array.from({length:K},(_,i)=>s.choices[i]?cname(s.choices[i]):'')]);
+  const L=Math.max(S.masters.length,S.companies.length,S.params.assos.length);
+  const vals=[['Niveau','Master','Association','Rôle','Entreprise'],...Array.from({length:L},(_,i)=>[NIVEAUX[i]||'',S.masters[i]?.label||'',S.params.assos[i]||'',ROLES[i]?.label||'',[...S.companies].sort((a,b)=>a.name.localeCompare(b.name))[i]?.name||''])];
+  offer('parrainages_BND_2026_eleves.xlsx',wbToBuf([['Élèves',[head,...rows],[22,8,40,40,...Array(K).fill(28)]],['Valeurs',vals,[8,45,24,14,50]]]));
+}
+function copyResult(){const t=resultRows().map(r=>r.join('\t')).join('\n');
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Tableau copié : colle-le dans Excel')).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Tableau copié')}catch(e){toast('Copie impossible')}ta.remove()})}
+
+/* ---------------- Événements ---------------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-tab],[data-sel],[data-act]'); if(!t) return;
+  if(t.dataset.tab){tab=t.dataset.tab;render();return}
+  if(t.dataset.sel){sel=sel===t.dataset.sel&&tab==='resultat'?null:t.dataset.sel;render();window.scrollTo({top:document.getElementById('tabs').offsetTop-8,behavior:'smooth'});return}
+  const act=t.dataset.act, s=S.students.find(x=>x.id===sel), i=+t.dataset.i;
+  switch(act){
+    case 'unsel':sel=null;break;
+    case 'up':if(s&&i>0)[s.choices[i-1],s.choices[i]]=[s.choices[i],s.choices[i-1]];break;
+    case 'down':if(s&&i<s.choices.length-1)[s.choices[i+1],s.choices[i]]=[s.choices[i],s.choices[i+1]];break;
+    case 'rmChoice':if(s)s.choices.splice(i,1);break;
+    case 'addChoice':{const v=document.getElementById('ed-add')?.value;if(s&&v)s.choices.push(v);break}
+    case 'addAsso':{const v=document.getElementById('ed-asso')?.value;if(s&&v)s.assos.push({asso:v,role:'membre'});break}
+    case 'delAsso':if(s)s.assos.splice(i,1);break;
+    case 'delStudent':if(s){S.students=S.students.filter(x=>x!==s);sel=null;toast(s.name+' supprimé·e')}break;
+    case 'addStudent':{const n={id:uid('s'),name:'Nouvel élève',key:'nouvel eleve '+Date.now(),niveau:'',master:'',assos:[],choices:[]};S.students.push(n);sel=n.id;break}
+    case 'bulkLevel':S.students.forEach(x=>{if(!x.niveau)x.niveau='M1'});toast('Niveaux manquants mis à M1');break;
+    case 'capAll':{const v=Math.max(0,+document.getElementById('capAll').value||0);S.companies.forEach(c=>c.cap=v);break}
+    case 'addCompany':S.companies.push({id:uid('c'),name:'Nouvelle entreprise',sector:'',d1:'',d2:'',cap:1});toast('Ajoutée en bas du tableau (0 demande)');break;
+    case 'delCompany':{const id=t.dataset.id;S.companies=S.companies.filter(c=>c.id!==id);S.students.forEach(x=>x.choices=x.choices.filter(c=>c!==id));break}
+    case 'addMaster':S.masters.push({id:uid('m'),label:'Nouveau master',aff:{}});break;
+    case 'delMaster':{const id=t.dataset.id;S.masters=S.masters.filter(m=>m.id!==id);S.students.forEach(x=>{if(x.master===id)x.master=''});break}
+    case 'cycle':{const c=S.companies.find(x=>x.id===t.dataset.c),m=S.masters.find(x=>x.id===t.dataset.m);if(!c||!m)return;c.aff=c.aff||{};c.aff[m.id]=(Math.round(compAff(c,m))+1)%3;
+      render();const b=document.querySelector(`[data-act="cycle"][data-c="${c.id}"][data-m="${m.id}"]`);if(b)b.focus({preventScroll:true});return}
+    case 'fake':{const n=Math.max(1,Math.min(300,+document.getElementById('fk-n').value||40)),K=Math.max(1,+document.getElementById('fk-k').value||6),sd=+document.getElementById('fk-seed').value||1;
+      S.students=makeFake(S,n,K,sd);S.fake={n,K,seed:sd};S.imports=[];sel=null;tab='resultat';toast(n+' élèves fictifs générés');break}
+    case 'dlResult':dlResult();return;
+    case 'dlTemplate':dlTemplate();return;
+    case 'copyResult':copyResult();return;
+    case 'dlJson':offer('parrainages_BND_2026_config.json',JSON.stringify(S,null,1));return;
+    case 'reset':document.getElementById('resetConfirm').innerHTML='<div class="row"><span>Toutes les modifications seront perdues.</span><button class="btn danger" data-act="resetYes">Confirmer</button></div>';return;
+    case 'resetYes':S=freshState();sel=null;toast('Démo de départ rechargée');break;
+    default:return;
+  }
+  render();
+});
+document.addEventListener('change',e=>{
+  const t=e.target, d=t.dataset;
+  if(d.f){const s=S.students.find(x=>x.id===d.id);if(!s)return;
+    if(d.f==='role')s.assos[+d.i].role=t.value;else s[d.f]=t.value;}
+  else if(d.cf){const c=S.companies.find(x=>x.id===d.id);c[d.cf]=d.cf==='cap'?Math.max(0,+t.value||0):t.value}
+  else if(d.p){S.params[d.p]=d.p==='engMode'?t.value:(+t.value||0)}
+  else if(d.lvl){S.params.lvl[d.lvl]=+t.value||0}
+  else if(d.role){S.params.role[d.role]=+t.value||0}
+  else if(d.m){S.masters.find(m=>m.id===d.m).aff[d.d]=+t.value}
+  else if(d.ml){S.masters.find(m=>m.id===d.ml).label=t.value}
+  else if(t.id==='round2'){S.params.round2=t.checked}
+  else if(t.id==='ed-name'){const s=S.students.find(x=>x.id===sel);if(s&&t.value.trim()){s.name=t.value.trim();s.key=norm(s.name)}}
+  else if(t.id==='fileIn'){importFile(t.files[0]);return}
+  else if(t.id==='jsonIn'){importJson(t.files[0]);return}
+  else return;
+  render();
+});
+document.addEventListener('input',e=>{if(e.target.id==='sfilter'){studentFilter=e.target.value;const pos=e.target.selectionStart;render();const f=document.getElementById('sfilter');f.focus();f.setSelectionRange(pos,pos)}});
+
+function importFile(f){
+  if(!f)return;const rd=new FileReader();
+  rd.onload=()=>{try{
+    const wb=XLSX.read(new Uint8Array(rd.result),{type:'array'});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:false}).filter(r=>r.some(x=>x!=null&&String(x).trim()!==''));
+    if(!rows.length)throw new Error('Fichier vide.');
+    if(S.fake){S.students=[];S.fake=null}
+    const h0=norm(rows[0][0]);let rep;
+    if(/entreprise|institution|company/.test(h0)){const r=parseSynthesis(rows,S,false);S.imports=r.issues;rep=`Synthèse importée : ${rows.length-1} entreprises lues.`}
+    else{const r=parseForm(rows,S);S.imports=r.issues;rep=`${r.n} élèves importés ou mis à jour.`}
+    tab='donnees';render();
+    document.getElementById('importReport').innerHTML=`<div class="chip ok">${esc(rep)}</div>${S.imports.length?`<ul style="margin:8px 0 0;padding-left:18px;font-size:13px">${S.imports.map(i=>`<li>${esc(i.msg)}</li>`).join('')}</ul>`:''}`;
+  }catch(err){document.getElementById('importReport').innerHTML=`<span class="chip bad">Import impossible : ${esc(err.message||err)}</span>`}};
+  rd.readAsArrayBuffer(f);
+}
+function importJson(f){if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const s=JSON.parse(rd.result);if(!s.companies||!s.students||!s.params)throw new Error('format inattendu');S=s;sel=null;tab='resultat';render();toast('Configuration importée')}catch(e){toast('Fichier de configuration invalide : '+e.message)}};rd.readAsText(f)}
+
+/* ---------------- Démarrage ---------------- */
+S=load()||freshState();
+S.companies.forEach(applyCompanyAff);
+render();
+</script>
+
+</body>
+</html>
